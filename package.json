@@ -1,0 +1,22 @@
+{
+    "name": "metric-search-engine",
+    "description": "metricSearchEngine",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "@aws-sdk/client-s3": "^3.50.0"
+    },
+    "devDependencies": {
+        "@aws-sdk/types": "^3.12.0",
+        "@types/node": "^14.14.37",
+        "jest": "^26.6.3",
+        "typescript": "^4.3.2"
+    },
+    "scripts": {
+        "test": "jest",
+        "build": "rm -rf dist && tsc -b",
+        "postbuild": "cp package.json dist && cd dist && yarn",
+        "deploy": "yarn build && sam validate && sam build && sam deploy --config-env staging",
+        "local:start": "yarn build && sam build && sam local invoke MetricSearchEngine --env-vars env.json -e events/event-cloudwatch-event.json"
+    }
+}

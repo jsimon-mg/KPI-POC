@@ -1,0 +1,11 @@
+version=0.1
+
+[staging.deploy.parameters]
+stack_name = "skydropx-stack-kpi-poc-metricSearchEngine-staging"
+s3_bucket = "skydropx.code.artifacts"
+s3_prefix = "skydropx-s3-prefix-kpi-poc-metricSearchEngine-staging"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+fail_on_empty_changeset = false
+parameter_overrides = "MetricsBucketName=\"metrics-skydropx\""

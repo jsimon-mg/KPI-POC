@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >-
+  Proof of concept of metrics for building kpis.
+
+Transform:
+  - AWS::Serverless-2016-10-31
+
+Parameters:
+  MetricsBucketName:
+    Type: String
+
+Resources:
+  MetricSearchEngine:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: A Lambda function that search metrics.
+      CodeUri: ./dist
+      Runtime: nodejs14.x
+      Architectures:
+        - x86_64
+      Handler: metricSearchEngine.handler
+      MemorySize: 128
+      Timeout: 100
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref MetricsBucketName
+      Policies:
+        - S3WritePolicy:
+            BucketName: !Ref MetricsBucketName
+      # Events:
+      #   CloudWatchEvent:
+      #     Type: Schedule
+      #     Properties:
+      #       Schedule: cron(0 15 * * ? *) # 15:00 AM (UTC) - 09:00 MX - 12:00 ARG - every day
+
+  DataMetricsBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref MetricsBucketName
+      VersioningConfiguration:
+        Status: Enabled
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ["*"]
+            AllowedMethods: [GET, PUT, DELETE]
+            AllowedOrigins: ["*"]
